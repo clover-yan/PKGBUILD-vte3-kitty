@@ -1,4 +1,5 @@
 # Maintainer: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
+# Maintainer: Fabian Bornschein <fabiscafe@archlinux.org>
 # Contributor: Ionut Biru <ibiru@archlinux.org>
 
 pkgbase=vte3
@@ -8,12 +9,15 @@ pkgname=(
   vte4
   vte-docs
 )
-pkgver=0.74.2
+pkgver=0.75.0
 pkgrel=1
 pkgdesc="Virtual Terminal Emulator widget"
 url="https://wiki.gnome.org/Apps/Terminal/VTE"
 arch=(x86_64)
-license=(LGPL)
+license=(
+  LGPL-3.0-or-later
+  GPL-3.0-or-later
+)
 makedepends=(
   cairo
   fribidi
@@ -30,7 +34,7 @@ makedepends=(
   vala
 )
 options=(!lto)
-_commit=3f66edbf598129bafde3baa91ccfb345056418c3  # tags/0.74.2^0
+_commit=de5df02c42eb5de98f92f5cb4520fc963a54ab51  # tags/0.75.0^0
 source=("git+https://gitlab.gnome.org/GNOME/vte.git#commit=$_commit")
 b2sums=('SKIP')
 
