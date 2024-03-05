@@ -9,7 +9,7 @@ pkgname=(
   vte4
   vte-docs
 )
-pkgver=0.75.91
+pkgver=0.75.92
 pkgrel=1
 pkgdesc="Virtual Terminal Emulator widget"
 url="https://wiki.gnome.org/Apps/Terminal/VTE"
@@ -34,7 +34,7 @@ makedepends=(
   vala
 )
 options=(!lto)
-_commit=4ebb548e28db550257d67e5fa329b80de4d7c10e  # tags/0.75.91^0
+_commit=acad28244fc5015fd547983037ed3029c624a5b3  # tags/0.75.92^0
 source=("git+https://gitlab.gnome.org/GNOME/vte.git#commit=$_commit")
 b2sums=('SKIP')
 

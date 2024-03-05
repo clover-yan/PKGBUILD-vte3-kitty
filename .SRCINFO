@@ -1,6 +1,6 @@
 pkgbase = vte3
 	pkgdesc = Virtual Terminal Emulator widget
-	pkgver = 0.75.91
+	pkgver = 0.75.92
 	pkgrel = 1
 	url = https://wiki.gnome.org/Apps/Terminal/VTE
 	arch = x86_64
@@ -20,7 +20,7 @@ pkgbase = vte3
 	makedepends = systemd
 	makedepends = vala
 	options = !lto
-	source = git+https://gitlab.gnome.org/GNOME/vte.git#commit=4ebb548e28db550257d67e5fa329b80de4d7c10e
+	source = git+https://gitlab.gnome.org/GNOME/vte.git#commit=acad28244fc5015fd547983037ed3029c624a5b3
 	b2sums = SKIP
 
 pkgname = vte-common
