@@ -10,7 +10,7 @@ pkgname=(
   vte-docs
 )
 pkgver=0.76.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Virtual Terminal Emulator widget"
 url="https://wiki.gnome.org/Apps/Terminal/VTE"
 arch=(x86_64)
@@ -18,19 +18,30 @@ license=(
   LGPL-3.0-or-later
   GPL-3.0-or-later
 )
-makedepends=(
+depends=(
   cairo
   fribidi
+  gcc-libs
+  gdk-pixbuf2
+  glib2
+  glibc
+  gnutls
+  icu
+  lz4
+  pango
+  pcre2
+  systemd
+  systemd-libs
+)
+makedepends=(
+  at-spi2-core
   gi-docgen
   git
-  gnutls
   gobject-introspection
   gperf
   gtk3
   gtk4
   meson
-  pcre2
-  systemd
   vala
 )
 options=(!lto)
@@ -49,7 +60,6 @@ prepare() {
 
 build() {
   local meson_options=(
-    -D b_lto=false
     -D docs=true
   )
 
@@ -73,7 +83,7 @@ _pick() {
 
 package_vte-common() {
   pkgdesc+=" (common files)"
-  depends=(sh)
+  depends=(glibc)
 
   meson install -C build --destdir "$pkgdir"
 
@@ -102,13 +112,9 @@ package_vte-common() {
 
 package_vte3() {
   pkgdesc+=" (GTK3)"
-  depends=(
-    cairo
-    fribidi
-    gnutls
+  depends+=(
+    at-spi2-core
     gtk3
-    pcre2
-    systemd
     vte-common
   )
   provides+=(libvte-2.91.so)
@@ -118,13 +124,8 @@ package_vte3() {
 
 package_vte4() {
   pkgdesc+=" (GTK4)"
-  depends=(
-    cairo
-    fribidi
-    gnutls
+  depends+=(
     gtk4
-    pcre2
-    systemd
     vte-common
   )
   provides+=(libvte-2.91-gtk4.so)
@@ -134,6 +135,7 @@ package_vte4() {
 
 package_vte-docs() {
   pkgdesc+=" (documentation)"
+  depends=()
 
   mv docs/* "$pkgdir"
 }
