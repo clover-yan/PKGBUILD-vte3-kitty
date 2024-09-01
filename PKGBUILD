@@ -9,7 +9,7 @@ pkgname=(
   vte4
   vte-docs
 )
-pkgver=0.77.91
+pkgver=0.77.92
 pkgrel=1
 pkgdesc="Virtual Terminal Emulator widget"
 url="https://wiki.gnome.org/Apps/Terminal/VTE"
@@ -52,7 +52,7 @@ makedepends=(
 )
 options=(!lto)
 source=("git+https://gitlab.gnome.org/GNOME/vte.git#tag=$pkgver")
-b2sums=('cf2cd3fd816214d6a1c527405c516c34ef791e32f61a0a8a0d4baa6bd0ca0ebcb29d83a7d5c8a738a0bf85d61d38efb70d4c7b404bc86e4b06b67682649ef09a')
+b2sums=('1f3a8f366206e5443fb3511c2e9eafd814249d89502682910e624904b2be5aaad28528f88e79c5e1621a4d8f59c181964ff6a9119090dcd8899d718482a96a96')
 
 prepare() {
   cd vte
