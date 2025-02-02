@@ -9,7 +9,7 @@ pkgname=(
   vte4
   vte-docs
 )
-pkgver=0.78.3
+pkgver=0.79.90
 pkgrel=1
 pkgdesc="Virtual Terminal Emulator widget"
 url="https://wiki.gnome.org/Apps/Terminal/VTE"
@@ -20,11 +20,10 @@ license=(
 
   # Demo app, some supporting files
   GPL-3.0-or-later
-
-  # COPYING.XTERM (X11 license) only applies to the disabled SIXEL code
 )
 depends=(
   cairo
+  fast_float
   fribidi
   gcc-libs
   gdk-pixbuf2
@@ -52,7 +51,7 @@ makedepends=(
 )
 options=(!lto)
 source=("git+https://gitlab.gnome.org/GNOME/vte.git#tag=$pkgver")
-b2sums=('388987e110e326705705a84c93f50b849172e3bbdb8559d6e573cb8edc475260b67cbd42acd9afdf083d6c9e3b155778337741b4ce3dd8ce02349497c4c8051c')
+b2sums=('0ca25762b4ce0a13676a356a8144bbdbba1a7bcc9feb79957b2ea815d29d327bb346129b2ad683d378fb30f372b9445e1d7269b64cbd9fade6dc23f31eee8ead')
 
 prepare() {
   cd vte
