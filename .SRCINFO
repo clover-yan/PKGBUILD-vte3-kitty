@@ -1,7 +1,7 @@
 pkgbase = vte3
 	pkgdesc = Virtual Terminal Emulator widget
 	pkgver = 0.79.91
-	pkgrel = 1
+	pkgrel = 2
 	url = https://wiki.gnome.org/Apps/Terminal/VTE
 	arch = x86_64
 	license = LGPL-3.0-or-later
@@ -60,6 +60,17 @@ pkgname = vte3
 	depends = vte-common
 	provides = libvte-2.91.so
 
+pkgname = vte3-utils
+	pkgdesc = VTE3 test utilities
+	depends = cairo
+	depends = gcc-libs
+	depends = gdk-pixbuf2
+	depends = glib2
+	depends = glibc
+	depends = gtk3
+	depends = pango
+	depends = vte3
+
 pkgname = vte4
 	pkgdesc = Virtual Terminal Emulator widget (GTK4)
 	depends = cairo
@@ -79,6 +90,17 @@ pkgname = vte4
 	depends = gtk4
 	depends = vte-common
 	provides = libvte-2.91-gtk4.so
+
+pkgname = vte4-utils
+	pkgdesc = VTE4 test utilities
+	depends = cairo
+	depends = gcc-libs
+	depends = gdk-pixbuf2
+	depends = glib2
+	depends = glibc
+	depends = gtk4
+	depends = pango
+	depends = vte4
 
 pkgname = vte-docs
 	pkgdesc = Virtual Terminal Emulator widget (documentation)

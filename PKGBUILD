@@ -6,11 +6,13 @@ pkgbase=vte3
 pkgname=(
   vte-common
   vte3
+  vte3-utils
   vte4
+  vte4-utils
   vte-docs
 )
 pkgver=0.79.91
-pkgrel=1
+pkgrel=2
 pkgdesc="Virtual Terminal Emulator widget"
 url="https://wiki.gnome.org/Apps/Terminal/VTE"
 arch=(x86_64)
@@ -89,22 +91,28 @@ package_vte-common() {
 
   cd "$pkgdir"
 
-  _pick gtk3 usr/bin/vte-2.91
-  _pick gtk3 usr/include/vte-2.91
-  _pick gtk3 usr/lib/libvte-2.91.so*
-  _pick gtk3 usr/lib/pkgconfig/vte-2.91.pc
-  _pick gtk3 usr/lib/girepository-1.0/Vte-2.91.typelib
-  _pick gtk3 usr/share/gir-1.0/Vte-2.91.gir
-  _pick gtk3 usr/share/glade
-  _pick gtk3 usr/share/vala/vapi/vte-2.91.{deps,vapi}
+  _pick vte3 usr/include/vte-2.91
+  _pick vte3 usr/lib/libvte-2.91.so*
+  _pick vte3 usr/lib/pkgconfig/vte-2.91.pc
+  _pick vte3 usr/lib/girepository-1.0/Vte-2.91.typelib
+  _pick vte3 usr/share/gir-1.0/Vte-2.91.gir
+  _pick vte3 usr/share/glade
+  _pick vte3 usr/share/vala/vapi/vte-2.91.{deps,vapi}
 
-  _pick gtk4 usr/bin/vte-2.91-gtk4
-  _pick gtk4 usr/include/vte-2.91-gtk4
-  _pick gtk4 usr/lib/libvte-2.91-gtk4.so*
-  _pick gtk4 usr/lib/pkgconfig/vte-2.91-gtk4.pc
-  _pick gtk4 usr/lib/girepository-1.0/Vte-3.91.typelib
-  _pick gtk4 usr/share/gir-1.0/Vte-3.91.gir
-  _pick gtk4 usr/share/vala/vapi/vte-2.91-gtk4.{deps,vapi}
+  _pick vte3-utils usr/bin/vte-2.91
+  _pick vte3-utils usr/share/applications/org.gnome.Vte.App.Gtk3.desktop
+  _pick vte3-utils usr/share/xdg-terminals/org.gnome.Vte.App.Gtk3.desktop
+
+  _pick vte4 usr/include/vte-2.91-gtk4
+  _pick vte4 usr/lib/libvte-2.91-gtk4.so*
+  _pick vte4 usr/lib/pkgconfig/vte-2.91-gtk4.pc
+  _pick vte4 usr/lib/girepository-1.0/Vte-3.91.typelib
+  _pick vte4 usr/share/gir-1.0/Vte-3.91.gir
+  _pick vte4 usr/share/vala/vapi/vte-2.91-gtk4.{deps,vapi}
+
+  _pick vte4-utils usr/bin/vte-2.91-gtk4
+  _pick vte4-utils usr/share/applications/org.gnome.Vte.App.Gtk4.desktop
+  _pick vte4-utils usr/share/xdg-terminals/org.gnome.Vte.App.Gtk4.desktop
 
   _pick docs usr/share/doc
 }
@@ -119,7 +127,23 @@ package_vte3() {
   )
   provides+=(libvte-2.91.so)
 
-  mv gtk3/* "$pkgdir"
+  mv vte3/* "$pkgdir"
+}
+
+package_vte3-utils() {
+  pkgdesc="VTE3 test utilities"
+  depends=(
+    cairo
+    gcc-libs
+    gdk-pixbuf2
+    glib2
+    glibc
+    gtk3
+    pango
+    vte3
+  )
+
+  mv vte3-utils/* "$pkgdir"
 }
 
 package_vte4() {
@@ -130,7 +154,23 @@ package_vte4() {
   )
   provides+=(libvte-2.91-gtk4.so)
 
-  mv gtk4/* "$pkgdir"
+  mv vte4/* "$pkgdir"
+}
+
+package_vte4-utils() {
+  pkgdesc="VTE4 test utilities"
+  depends=(
+    cairo
+    gcc-libs
+    gdk-pixbuf2
+    glib2
+    glibc
+    gtk4
+    pango
+    vte4
+  )
+
+  mv vte4-utils/* "$pkgdir"
 }
 
 package_vte-docs() {
