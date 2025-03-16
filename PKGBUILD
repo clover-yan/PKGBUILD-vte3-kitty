@@ -11,8 +11,8 @@ pkgname=(
   vte4-utils
   vte-docs
 )
-pkgver=0.79.91
-pkgrel=2
+pkgver=0.80.0
+pkgrel=1
 pkgdesc="Virtual Terminal Emulator widget"
 url="https://wiki.gnome.org/Apps/Terminal/VTE"
 arch=(x86_64)
@@ -54,7 +54,7 @@ makedepends=(
 )
 options=(!lto)
 source=("git+https://gitlab.gnome.org/GNOME/vte.git#tag=$pkgver")
-b2sums=('05a9c73806f47af10464b7eb8e39bf0f1058e2faebce50c33efb584a7e4476572a63a84f4c98af02999b176e638297abc84adde894d256b98bd22d6c251aef24')
+b2sums=('6e0ca4a641faf5658491f58d692be8945a6fe53cb675fb614ad5c5c38905ea18833c8b7b83535e790bc4772b21943bee46e4a967e6dac986eb3476c32000ea9e')
 
 prepare() {
   cd vte
@@ -120,6 +120,7 @@ package_vte-common() {
 
 package_vte3() {
   pkgdesc+=" (GTK3)"
+  license=(LGPL-3.0-or-later)
   depends+=(
     at-spi2-core
     gtk3
@@ -132,6 +133,7 @@ package_vte3() {
 
 package_vte3-utils() {
   pkgdesc="VTE3 test utilities"
+  license=(GPL-3.0-or-later)
   depends=(
     cairo
     gcc-libs
@@ -148,6 +150,7 @@ package_vte3-utils() {
 
 package_vte4() {
   pkgdesc+=" (GTK4)"
+  license=(LGPL-3.0-or-later)
   depends+=(
     gtk4
     vte-common
@@ -159,6 +162,7 @@ package_vte4() {
 
 package_vte4-utils() {
   pkgdesc="VTE4 test utilities"
+  license=(GPL-3.0-or-later)
   depends=(
     cairo
     gcc-libs
