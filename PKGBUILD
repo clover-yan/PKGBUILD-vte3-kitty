@@ -11,7 +11,7 @@ pkgname=(
   vte4-utils
   vte-docs
 )
-pkgver=0.81.90
+pkgver=0.82.0
 pkgrel=1
 pkgdesc="Virtual Terminal Emulator widget"
 url="https://wiki.gnome.org/Apps/Terminal/VTE"
@@ -58,7 +58,7 @@ source=(
   "git+https://github.com/fmtlib/fmt.git#tag=11.1.4"
   "git+https://github.com/simdutf/simdutf.git#tag=v6.4.0"
 )
-b2sums=('a458712ae1fcb3a12a8439a2b21d1649b1a7c675921dff0afcab9d5eea4f282eeac334deccba95695aed9fba45123635b327205b01c8e5c1ecea312afe7a8851'
+b2sums=('59ffcc20365ec6a89c6ae7c89b3e5bbebe7e525cb3608d1056c49faa7015f1c066e35d98bbd50051390731a090186006101bfbc490cbb7d86a409ec614d7887d'
         'e150c93041012709b36cd29ac17b79f988f8ed16f49f6dd900628d42062b753407244eb2a4e8a45c992f0fded8fca19951124bb36f6797b51daa75c9e09843d3'
         '32939601b78402d5b69d620798c9df14df8ce639d9ba9d5cfe1b0bc05417fa743a5acd97ede0f4a715efeebea1920e91fa8f583c6531851917fadf701d4e3ea5')
 
