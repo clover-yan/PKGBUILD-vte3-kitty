@@ -12,7 +12,7 @@ pkgname=(
   vte-docs
 )
 pkgver=0.82.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Virtual Terminal Emulator widget"
 url="https://wiki.gnome.org/Apps/Terminal/VTE"
 arch=(x86_64)
@@ -27,11 +27,9 @@ depends=(
   cairo
   fribidi
   gcc-libs
-  gdk-pixbuf2
   glib2
   glibc
   gnutls
-  graphene
   icu
   lz4
   pango
@@ -41,12 +39,14 @@ depends=(
 )
 makedepends=(
   at-spi2-core
-  gi-docgen
   fast_float
+  fmt
+  gi-docgen
   git
   glib2-devel
   gobject-introspection
   gperf
+  graphene
   gtk3
   gtk4
   meson
@@ -55,11 +55,9 @@ makedepends=(
 options=(!lto)
 source=(
   "git+https://gitlab.gnome.org/GNOME/vte.git#tag=$pkgver"
-  "git+https://github.com/fmtlib/fmt.git#tag=11.1.4"
   "git+https://github.com/simdutf/simdutf.git#tag=v6.4.0"
 )
 b2sums=('59ffcc20365ec6a89c6ae7c89b3e5bbebe7e525cb3608d1056c49faa7015f1c066e35d98bbd50051390731a090186006101bfbc490cbb7d86a409ec614d7887d'
-        'e150c93041012709b36cd29ac17b79f988f8ed16f49f6dd900628d42062b753407244eb2a4e8a45c992f0fded8fca19951124bb36f6797b51daa75c9e09843d3'
         '32939601b78402d5b69d620798c9df14df8ce639d9ba9d5cfe1b0bc05417fa743a5acd97ede0f4a715efeebea1920e91fa8f583c6531851917fadf701d4e3ea5')
 
 prepare() {
@@ -71,7 +69,7 @@ build() {
     -D docs=true
   )
 
-  # Inject fmt, simdutf
+  # Inject simdutf
   export MESON_PACKAGE_CACHE_DIR="$srcdir"
 
   arch-meson vte build "${meson_options[@]}"
@@ -161,6 +159,7 @@ package_vte4() {
   pkgdesc+=" (GTK4)"
   license=(LGPL-3.0-or-later)
   depends+=(
+    graphene
     gtk4
     vte-common
   )
