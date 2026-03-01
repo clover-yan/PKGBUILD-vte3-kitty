@@ -11,7 +11,7 @@ pkgname=(
   vte4-utils
   vte-docs
 )
-pkgver=0.83.90
+pkgver=0.83.91
 pkgrel=1
 pkgdesc="Virtual Terminal Emulator widget"
 url="https://wiki.gnome.org/Apps/Terminal/VTE"
@@ -26,11 +26,12 @@ license=(
 depends=(
   cairo
   fribidi
-  gcc-libs
   glib2
   glibc
   gnutls
   icu
+  libgcc
+  libstdc++
   lz4
   pango
   pcre2
@@ -57,7 +58,7 @@ source=(
   "git+https://gitlab.gnome.org/GNOME/vte.git#tag=$pkgver"
   "git+https://github.com/simdutf/simdutf.git#tag=v7.7.1"
 )
-b2sums=('45f3ced172cec9f238055180107684a12803291ecc8272ed2b5fc24031423afc8a916c5e9d83b606c2a5d536fee0cf852fc0398f36404f72bae81a0adeed4b6a'
+b2sums=('bd93003f22eafdb06dcf9bbf79bd16001a431c9e2d891c0ccfeb926882af61d5b1218868da9eee5b98fed6c3f7faba221799ff49a5e8587f2053bc351ee8647f'
         '3e1d163c87bbe1c0f0eecc1ee4851e47d6dbdd3e471ce943bf68a7e5ee9680ad74c2a2527d3fc35c7d392b5e077070b504070eb9f6c212abe5d11885c6e1a84e')
 
 prepare() {
@@ -143,11 +144,12 @@ package_vte3-utils() {
   license=(GPL-3.0-or-later)
   depends=(
     cairo
-    gcc-libs
     gdk-pixbuf2
     glib2
     glibc
     gtk3
+    libgcc
+    libstdc++
     pango
     vte3
   )
@@ -173,11 +175,12 @@ package_vte4-utils() {
   license=(GPL-3.0-or-later)
   depends=(
     cairo
-    gcc-libs
     gdk-pixbuf2
     glib2
     glibc
     gtk4
+    libgcc
+    libstdc++
     pango
     vte4
   )
