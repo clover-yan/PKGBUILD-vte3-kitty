@@ -1,6 +1,6 @@
 pkgbase = vte3
 	pkgdesc = Virtual Terminal Emulator widget
-	pkgver = 0.83.91
+	pkgver = 0.84.0
 	pkgrel = 1
 	url = https://wiki.gnome.org/Apps/Terminal/VTE
 	arch = x86_64
@@ -33,9 +33,9 @@ pkgbase = vte3
 	depends = systemd
 	depends = systemd-libs
 	options = !lto
-	source = git+https://gitlab.gnome.org/GNOME/vte.git#tag=0.83.91
+	source = git+https://gitlab.gnome.org/GNOME/vte.git#tag=0.84.0
 	source = git+https://github.com/simdutf/simdutf.git#tag=v7.7.1
-	b2sums = bd93003f22eafdb06dcf9bbf79bd16001a431c9e2d891c0ccfeb926882af61d5b1218868da9eee5b98fed6c3f7faba221799ff49a5e8587f2053bc351ee8647f
+	b2sums = bc3016dc04a8500cc77e4dd8414d03c67d323bca8bff8f89dcae1df65c37778f2ee49c6cf143e1e6c3dcc75facb5631d5030af88267e88cf78692f0ae0021f48
 	b2sums = 3e1d163c87bbe1c0f0eecc1ee4851e47d6dbdd3e471ce943bf68a7e5ee9680ad74c2a2527d3fc35c7d392b5e077070b504070eb9f6c212abe5d11885c6e1a84e
 
 pkgname = vte-common
