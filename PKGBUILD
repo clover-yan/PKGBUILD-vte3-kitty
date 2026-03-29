@@ -14,7 +14,7 @@ pkgname=(
 pkgver=0.84.0
 pkgrel=1
 pkgdesc="Virtual Terminal Emulator widget"
-url="https://wiki.gnome.org/Apps/Terminal/VTE"
+url="https://gitlab.gnome.org/GNOME/vte"
 arch=(x86_64)
 license=(
   # Library
