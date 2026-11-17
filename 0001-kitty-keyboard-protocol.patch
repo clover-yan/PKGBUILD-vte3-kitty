@@ -1,0 +1,690 @@
+diff --git a/meson.build b/meson.build
+index 3e2c090..ffab175 100644
+--- a/meson.build
++++ b/meson.build
+@@ -670,6 +670,7 @@ pcre2_dep         = dependency('libpcre2-8', version: '>=' + pcre2_req_version)
+ pthreads_dep      = dependency('threads')
+ liblz4_dep        = dependency('liblz4', version: '>=' + liblz4_req_version)
+ simdutf_dep       = dependency('simdutf', version: '>=' + simdutf_req_version, required: true, default_options: simdutf_default_options)
++xkbcommon_dep     = dependency('xkbcommon')
+ 
+ # fmt dep needs a bit more massaging since we don't know
+ # if the system fmt is a shared or static library, and in
+diff --git a/src/kittykeys.h b/src/kittykeys.h
+new file mode 100644
+index 0000000..6ec9287
+--- /dev/null
++++ b/src/kittykeys.h
+@@ -0,0 +1,125 @@
++/*
++ * Constants for the kitty keyboard protocol
++ * Reference: https://sw.kovidgoyal.net/kitty/keyboard-protocol/
++ */
++
++#pragma once
++
++// Basic keys
++#define KITTY_KEY_INSERT       2
++#define KITTY_KEY_DELETE       3
++#define KITTY_KEY_TAB          9
++#define KITTY_KEY_ENTER        13
++#define KITTY_KEY_ESCAPE       27
++#define KITTY_KEY_BACKSPACE    127
++
++// Navigation keys
++#define KITTY_KEY_LEFT         1
++#define KITTY_KEY_RIGHT        1
++#define KITTY_KEY_UP           1
++#define KITTY_KEY_DOWN         1
++#define KITTY_KEY_HOME         1
++#define KITTY_KEY_END          1
++#define KITTY_KEY_KP_BEGIN     1
++#define KITTY_KEY_PAGE_UP      5
++#define KITTY_KEY_PAGE_DOWN    6
++
++#define KITTY_KEY_CAPS_LOCK    57358
++#define KITTY_KEY_SCROLL_LOCK  57359
++#define KITTY_KEY_NUM_LOCK     57360
++#define KITTY_KEY_PRINT_SCREEN 57361
++#define KITTY_KEY_PAUSE        57362
++#define KITTY_KEY_MENU         57363
++
++// Function keys
++#define KITTY_KEY_F1           11
++#define KITTY_KEY_F2           12
++#define KITTY_KEY_F3           13
++#define KITTY_KEY_F4           14
++#define KITTY_KEY_F5           15
++#define KITTY_KEY_F6           17
++#define KITTY_KEY_F7           18
++#define KITTY_KEY_F8           19
++#define KITTY_KEY_F9           20
++#define KITTY_KEY_F10          21
++#define KITTY_KEY_F11          23
++#define KITTY_KEY_F12          24
++#define KITTY_KEY_F13          57388
++#define KITTY_KEY_F14          57389
++#define KITTY_KEY_F15          57390
++#define KITTY_KEY_F16          57391
++#define KITTY_KEY_F17          57392
++#define KITTY_KEY_F18          57393
++#define KITTY_KEY_F19          57394
++#define KITTY_KEY_F20          57395
++#define KITTY_KEY_F21          57396
++#define KITTY_KEY_F22          57397
++#define KITTY_KEY_F23          57398
++#define KITTY_KEY_F24          57399
++#define KITTY_KEY_F25          57400
++#define KITTY_KEY_F26          57401
++#define KITTY_KEY_F27          57402
++#define KITTY_KEY_F28          57403
++#define KITTY_KEY_F29          57404
++#define KITTY_KEY_F30          57405
++#define KITTY_KEY_F31          57406
++#define KITTY_KEY_F32          57407
++#define KITTY_KEY_F33          57408
++#define KITTY_KEY_F34          57409
++#define KITTY_KEY_F35          57410
++
++// Keypad keys
++#define KITTY_KEY_KP_0         57399
++#define KITTY_KEY_KP_1         57400
++#define KITTY_KEY_KP_2         57401
++#define KITTY_KEY_KP_3         57402
++#define KITTY_KEY_KP_4         57403
++#define KITTY_KEY_KP_5         57404
++#define KITTY_KEY_KP_6         57405
++#define KITTY_KEY_KP_7         57406
++#define KITTY_KEY_KP_8         57407
++#define KITTY_KEY_KP_9         57408
++#define KITTY_KEY_KP_DECIMAL   57409
++#define KITTY_KEY_KP_DIVIDE    57410
++#define KITTY_KEY_KP_MULTIPLY  57411
++#define KITTY_KEY_KP_SUBTRACT  57412
++#define KITTY_KEY_KP_ADD       57413
++#define KITTY_KEY_KP_ENTER     57414
++#define KITTY_KEY_KP_EQUAL     57415
++#define KITTY_KEY_KP_SEPARATOR 57416
++#define KITTY_KEY_KP_LEFT      57417
++#define KITTY_KEY_KP_RIGHT     57418
++#define KITTY_KEY_KP_UP        57419
++#define KITTY_KEY_KP_DOWN      57420
++#define KITTY_KEY_KP_PAGE_UP   57421
++#define KITTY_KEY_KP_PAGE_DOWN 57422
++#define KITTY_KEY_KP_HOME      57423
++#define KITTY_KEY_KP_END       57424
++#define KITTY_KEY_KP_INSERT    57425
++#define KITTY_KEY_KP_DELETE    57426
++
++// Modifiers (as shift counts for CSI u)
++// 1 = Shift
++// 2 = Alt
++// 4 = Ctrl
++// 8 = Super
++// 16 = Hyper
++// 32 = Meta
++// 64 = Caps Lock
++// 128 = Num Lock
++
++// Modifiers keys
++#define KITTY_KEY_LEFT_SHIFT   57441
++#define KITTY_KEY_LEFT_CONTROL 57442
++#define KITTY_KEY_LEFT_ALT     57443
++#define KITTY_KEY_LEFT_SUPER   57444
++#define KITTY_KEY_LEFT_HYPER   57445
++#define KITTY_KEY_LEFT_META    57446
++#define KITTY_KEY_RIGHT_SHIFT  57447
++#define KITTY_KEY_RIGHT_CONTROL 57448
++#define KITTY_KEY_RIGHT_ALT    57449
++#define KITTY_KEY_RIGHT_SUPER  57450
++#define KITTY_KEY_RIGHT_HYPER  57451
++#define KITTY_KEY_RIGHT_META   57452
++#define KITTY_KEY_ISO_LEVEL3_SHIFT 57453
++#define KITTY_KEY_ISO_LEVEL5_SHIFT 57454
+diff --git a/src/meson.build b/src/meson.build
+index ac1df21..31385bd 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -343,6 +343,7 @@ libvte_common_public_deps = [
+   glib_dep,
+   gobject_dep,
+   pango_dep,
++  xkbcommon_dep,
+ ]
+ 
+ libvte_common_deps = libvte_common_public_deps + [
+diff --git a/src/vte.cc b/src/vte.cc
+index 4f6b437..5d5d692 100644
+--- a/src/vte.cc
++++ b/src/vte.cc
+@@ -38,9 +38,11 @@
+ #include <glib.h>
+ #include <glib-unix.h>
+ #include <glib/gi18n-lib.h>
++#include <xkbcommon/xkbcommon.h>
+ 
+ #include <vte/vte.h>
+ #include "vteinternal.hh"
++#include "kittykeys.h"
+ #include "bidi.hh"
+ #include "buffer.h"
+ #include "debug.hh"
+@@ -4243,6 +4245,49 @@ Terminal::process_incoming_utf8(ProcessingContext& context,
+                                 break;
+ 
+                         default: {
++
++                                if (G_LIKELY(rv != VTE_SEQ_GRAPHIC) && (bool)seq && seq.terminator() == 'u') {
++
++                                        const int op_code = VTE_SEQ_PARAMETER(seq.intermediates());
++                                        bool handled = true;
++
++                                        /*
++                                         * kitty keyboard protocol, flags management
++                                         */
++                                        switch (op_code) {
++                                                case VTE_SEQ_PARAMETER_EQUAL: {
++                                                        int flags = seq.collect1(0, 0);
++                                                        int mode = seq.collect1(1, 1);
++                                                        if (mode == 1) set_kitty_keyboard_flags(flags);
++                                                        else if (mode == 2) set_kitty_keyboard_flags(m_kitty_keyboard_flags | flags);
++                                                        else if (mode == 3) set_kitty_keyboard_flags(m_kitty_keyboard_flags & ~flags);
++                                                        break;
++                                                }
++                                                case VTE_SEQ_PARAMETER_GT:
++                                                        push_kitty_keyboard_flags(seq.collect1(0, 0));
++                                                        break;
++                                                case VTE_SEQ_PARAMETER_LT:
++                                                        pop_kitty_keyboard_flags(seq.collect1(0, 1));
++                                                        break;
++                                                case VTE_SEQ_PARAMETER_WHAT: {
++                                                        char buffer[64];
++                                                        int size = snprintf(buffer, sizeof(buffer), "\x1b[?%du",
++                                                        	m_kitty_keyboard_flags);
++                                                        send_child({buffer, static_cast<size_t>(size)});
++                                                        break;
++                                                }
++                                                default:
++                                                        handled = false;
++                                                        break;
++                                        }
++
++                                        if (handled) {
++                                                context.post_CMD();
++                                                /* We've handled it, so we break from the main switch. */
++                                                break;
++                                        }
++                                }
++
+                                 switch (seq.command()) {
+ #define _VTE_CMD_HANDLER(cmd)   \
+                                 case VTE_CMD_##cmd: cmd(seq); break;
+@@ -5280,7 +5325,342 @@ bool
+ Terminal::widget_key_press(vte::platform::KeyEvent const& event)
+ {
+         auto handled = false;
+-	char *normal = NULL;
++        char *normal = NULL;
++
++        /*
++         * kitty keyboard protocol implementation.
++         *
++         */
++        if (m_kitty_keyboard_flags > 0 &&
++            m_kitty_keyboard_mode_is_available &&
++            event.keycode()) {
++
++                unsigned int kitty_key = 0;
++                unsigned int shifted_key = 0;
++                unsigned int base_key = 0;
++                unsigned int modifiers = 0;
++                bool is_keypad_key = false;
++                unsigned int key_mod_mask = 0;
++
++                xkb_keysym_t base_sym = xkb_state_key_get_one_sym(m_xkb_data.state_us, event.keycode());
++                if (base_sym >= 0x20 && base_sym < 0x7f) {
++                    base_key = base_sym;
++                }
++
++                if (event.modifiers() & GDK_SHIFT_MASK)   modifiers |= 1;
++                if (event.modifiers() & VTE_ALT_MASK)     modifiers |= 2;
++                if (event.modifiers() & GDK_CONTROL_MASK) modifiers |= 4;
++                if (event.modifiers() & GDK_SUPER_MASK)   modifiers |= 8;
++                if (event.modifiers() & GDK_HYPER_MASK)   modifiers |= 16;
++                if (event.modifiers() & GDK_META_MASK)    modifiers |= 32;
++                if (event.modifiers() & GDK_LOCK_MASK)    modifiers |= 64;
++
++                guint numlock_mask = VTE_NUMLOCK_MASK;
++                if (numlock_mask == 0)
++                        numlock_mask = (1 << 4);
++                if (event.modifiers() & numlock_mask)
++                        modifiers |= 128;
++
++                bool report_all = (m_kitty_keyboard_flags & 8) != 0;
++                bool disambiguate = (m_kitty_keyboard_flags & 1) != 0;
++                bool report_event_types = (m_kitty_keyboard_flags & 2) != 0;
++
++                if (!report_all && !disambiguate && !report_event_types) {
++                        if (modifiers == 0) {
++                                switch (event.keyval()) {
++                                case GDK_KEY_F1:
++                                case GDK_KEY_F2:
++                                case GDK_KEY_F3:
++                                case GDK_KEY_F4:
++                                case GDK_KEY_Escape:
++                                        goto legacy_fallback;
++                                }
++                        }
++                        if (event.keyval() == GDK_KEY_Escape) {
++                                send_child((modifiers & 2) ?
++                                           "\x1b\x1b" : "\x1b");
++                                return true;
++                        }
++                }
++
++                switch (event.keyval()) {
++                case GDK_KEY_Escape:    kitty_key = KITTY_KEY_ESCAPE;    break;
++                case GDK_KEY_Return:    kitty_key = KITTY_KEY_ENTER;     break;
++                case GDK_KEY_Tab:       kitty_key = KITTY_KEY_TAB;       break;
++                case GDK_KEY_BackSpace: kitty_key = KITTY_KEY_BACKSPACE; break;
++                case GDK_KEY_Insert:    kitty_key = KITTY_KEY_INSERT;    break;
++                case GDK_KEY_Delete:    kitty_key = KITTY_KEY_DELETE;    break;
++                case GDK_KEY_Left:      kitty_key = KITTY_KEY_LEFT;      break;
++                case GDK_KEY_Right:     kitty_key = KITTY_KEY_RIGHT;     break;
++                case GDK_KEY_Up:        kitty_key = KITTY_KEY_UP;        break;
++                case GDK_KEY_Down:      kitty_key = KITTY_KEY_DOWN;      break;
++                case GDK_KEY_Page_Up:   kitty_key = KITTY_KEY_PAGE_UP;   break;
++                case GDK_KEY_Page_Down: kitty_key = KITTY_KEY_PAGE_DOWN; break;
++                case GDK_KEY_Home:      kitty_key = KITTY_KEY_HOME;      break;
++                case GDK_KEY_End:       kitty_key = KITTY_KEY_END;       break;
++                case GDK_KEY_F1:        kitty_key = KITTY_KEY_F1;        break;
++                case GDK_KEY_F2:        kitty_key = KITTY_KEY_F2;        break;
++                case GDK_KEY_F3:        kitty_key = KITTY_KEY_F3;        break;
++                case GDK_KEY_F4:        kitty_key = KITTY_KEY_F4;        break;
++                case GDK_KEY_F5:        kitty_key = KITTY_KEY_F5;        break;
++                case GDK_KEY_F6:        kitty_key = KITTY_KEY_F6;        break;
++                case GDK_KEY_F7:        kitty_key = KITTY_KEY_F7;        break;
++                case GDK_KEY_F8:        kitty_key = KITTY_KEY_F8;        break;
++                case GDK_KEY_F9:        kitty_key = KITTY_KEY_F9;        break;
++                case GDK_KEY_F10:       kitty_key = KITTY_KEY_F10;       break;
++                case GDK_KEY_F11:       kitty_key = KITTY_KEY_F11;       break;
++                case GDK_KEY_F12:       kitty_key = KITTY_KEY_F12;       break;
++
++                case GDK_KEY_KP_0:      kitty_key = KITTY_KEY_KP_0; is_keypad_key = true; break;
++                case GDK_KEY_KP_1:      kitty_key = KITTY_KEY_KP_1; is_keypad_key = true; break;
++                case GDK_KEY_KP_2:      kitty_key = KITTY_KEY_KP_2; is_keypad_key = true; break;
++                case GDK_KEY_KP_3:      kitty_key = KITTY_KEY_KP_3; is_keypad_key = true; break;
++                case GDK_KEY_KP_4:      kitty_key = KITTY_KEY_KP_4; is_keypad_key = true; break;
++                case GDK_KEY_KP_5:      kitty_key = KITTY_KEY_KP_5; is_keypad_key = true; break;
++                case GDK_KEY_KP_6:      kitty_key = KITTY_KEY_KP_6; is_keypad_key = true; break;
++                case GDK_KEY_KP_7:      kitty_key = KITTY_KEY_KP_7; is_keypad_key = true; break;
++                case GDK_KEY_KP_8:      kitty_key = KITTY_KEY_KP_8; is_keypad_key = true; break;
++                case GDK_KEY_KP_9:      kitty_key = KITTY_KEY_KP_9; is_keypad_key = true; break;
++                case GDK_KEY_KP_Decimal:   kitty_key = KITTY_KEY_KP_DECIMAL;   is_keypad_key = true; break;
++                case GDK_KEY_KP_Divide:    kitty_key = KITTY_KEY_KP_DIVIDE;    is_keypad_key = true; break;
++                case GDK_KEY_KP_Multiply:  kitty_key = KITTY_KEY_KP_MULTIPLY;  is_keypad_key = true; break;
++                case GDK_KEY_KP_Subtract:  kitty_key = KITTY_KEY_KP_SUBTRACT;  is_keypad_key = true; break;
++                case GDK_KEY_KP_Add:       kitty_key = KITTY_KEY_KP_ADD;       is_keypad_key = true; break;
++                case GDK_KEY_KP_Enter:     kitty_key = KITTY_KEY_KP_ENTER;     is_keypad_key = true; break;
++                case GDK_KEY_KP_Equal:     kitty_key = KITTY_KEY_KP_EQUAL;     is_keypad_key = true; break;
++                case GDK_KEY_KP_Separator: kitty_key = KITTY_KEY_KP_SEPARATOR; is_keypad_key = true; break;
++
++                case GDK_KEY_KP_Home:      kitty_key = 57423; is_keypad_key = true; break;
++                case GDK_KEY_KP_End:       kitty_key = 57424; is_keypad_key = true; break;
++                case GDK_KEY_KP_Insert:    kitty_key = 57425; is_keypad_key = true; break;
++                case GDK_KEY_KP_Delete:    kitty_key = 57426; is_keypad_key = true; break;
++                case GDK_KEY_KP_Page_Up:   kitty_key = 57421; is_keypad_key = true; break;
++                case GDK_KEY_KP_Page_Down: kitty_key = 57422; is_keypad_key = true; break;
++                case GDK_KEY_KP_Up:        kitty_key = 57419; is_keypad_key = true; break;
++                case GDK_KEY_KP_Down:      kitty_key = 57420; is_keypad_key = true; break;
++                case GDK_KEY_KP_Left:      kitty_key = 57417; is_keypad_key = true; break;
++                case GDK_KEY_KP_Right:     kitty_key = 57418; is_keypad_key = true; break;
++                case GDK_KEY_KP_Begin:     kitty_key = 57427; is_keypad_key = true; break;
++
++                default:
++                        kitty_key = gdk_keyval_to_unicode(event.keyval());
++                        break;
++                }
++
++                if (kitty_key > 0) {
++                        unsigned int unshifted_key;
++                        unsigned int text_codepoint = 0;
++                        bool is_modifier_key = (key_mod_mask != 0);
++                        bool is_plain_special = (kitty_key == KITTY_KEY_TAB ||
++                                                 kitty_key == KITTY_KEY_ENTER ||
++                                                 kitty_key == KITTY_KEY_BACKSPACE);
++                        bool is_regular_text_key = !is_modifier_key &&
++                                                   !is_keypad_key &&
++                                                   !is_plain_special &&
++                                                   (kitty_key >= 32 &&
++                                                    kitty_key < 57344 &&
++                                                    kitty_key != 127);
++
++                        unsigned int gdk_unicode = gdk_keyval_to_unicode(event.keyval());
++                        bool produces_text = (gdk_unicode >= 32 &&
++                                              gdk_unicode < 0xD800 &&
++                                              gdk_unicode != 127);
++
++                        // Fallback for keypad digits (NumLock handling)
++                        if (!produces_text && is_keypad_key && (modifiers & 128)) {
++                                if (event.keyval() >= GDK_KEY_KP_0 &&
++                                    event.keyval() <= GDK_KEY_KP_9) {
++                                        gdk_unicode = '0' + (event.keyval() - GDK_KEY_KP_0);
++                                        produces_text = true;
++                                } else {
++                                        switch (event.keyval()) {
++                                        case GDK_KEY_KP_Decimal:  gdk_unicode = '.'; produces_text = true; break;
++                                        case GDK_KEY_KP_Divide:   gdk_unicode = '/'; produces_text = true; break;
++                                        case GDK_KEY_KP_Multiply: gdk_unicode = '*'; produces_text = true; break;
++                                        case GDK_KEY_KP_Subtract: gdk_unicode = '-'; produces_text = true; break;
++                                        case GDK_KEY_KP_Add:      gdk_unicode = '+'; produces_text = true; break;
++                                        case GDK_KEY_KP_Enter:    gdk_unicode = '\r'; produces_text = true; break;
++                                        case GDK_KEY_KP_Equal:    gdk_unicode = '='; produces_text = true; break;
++                                        case GDK_KEY_KP_Separator:gdk_unicode = ','; produces_text = true; break;
++                                        }
++                                }
++                        }
++
++                        if (is_plain_special) {
++                                unshifted_key = kitty_key;
++                                shifted_key = 0;
++                                text_codepoint = kitty_key;
++                        } else if (is_regular_text_key) {
++                                unshifted_key = gdk_keyval_to_unicode(
++                                                    gdk_keyval_to_lower(event.keyval()));
++                                
++                                if (unshifted_key == 0) unshifted_key = kitty_key;
++
++                                switch (unshifted_key) {
++                                case '`': shifted_key = '~'; break; case '1': shifted_key = '!'; break;
++                                case '2': shifted_key = '@'; break; case '3': shifted_key = '#'; break;
++                                case '4': shifted_key = '$'; break; case '5': shifted_key = '%'; break;
++                                case '6': shifted_key = '^'; break; case '7': shifted_key = '&'; break;
++                                case '8': shifted_key = '*'; break; case '9': shifted_key = '('; break;
++                                case '0': shifted_key = ')'; break; case '-': shifted_key = '_'; break;
++                                case '=': shifted_key = '+'; break; case '[': shifted_key = '{'; break;
++                                case ']': shifted_key = '}'; break; case '\\': shifted_key = '|'; break;
++                                case ';': shifted_key = ':'; break; case '\'': shifted_key = '"'; break;
++                                case ',': shifted_key = '<'; break; case '.': shifted_key = '>'; break;
++                                case '/': shifted_key = '?'; break;
++                                default: shifted_key = gdk_keyval_to_unicode(
++                                                           gdk_keyval_to_upper(event.keyval())); break;
++                                }
++                                
++                                switch(unshifted_key) {
++                                    case '~': unshifted_key = '`'; break; case '!': unshifted_key = '1'; break;
++                                    case '@': unshifted_key = '2'; break; case '#': unshifted_key = '3'; break;
++                                    case '$': unshifted_key = '4'; break; case '%': unshifted_key = '5'; break;
++                                    case '^': unshifted_key = '6'; break; case '&': unshifted_key = '7'; break;
++                                    case '*': unshifted_key = '8'; break; case '(': unshifted_key = '9'; break;
++                                    case ')': unshifted_key = '0'; break; case '_': unshifted_key = '-'; break;
++                                    case '+': unshifted_key = '='; break; case '{': unshifted_key = '['; break;
++                                    case '}': unshifted_key = ']'; break; case '|': unshifted_key = '\\'; break;
++                                    case ':': unshifted_key = ';'; break; case '"': unshifted_key = '\''; break;
++                                    case '<': unshifted_key = ','; break; case '>': unshifted_key = '.'; break;
++                                    case '?': unshifted_key = '/'; break;
++                                }
++                                
++                                bool shift_active = (modifiers & 1) != 0;
++                                bool caps_active = (modifiers & 64) != 0;
++                                if (gdk_keyval_to_lower(event.keyval()) != gdk_keyval_to_upper(event.keyval()))
++                                        text_codepoint = (shift_active ^ caps_active) ?
++                                                         shifted_key : unshifted_key;
++                                else
++                                        text_codepoint = shift_active ? shifted_key : unshifted_key;
++                        } else {
++                                unshifted_key = kitty_key;
++                                shifted_key = 0;
++                                text_codepoint = produces_text ? gdk_unicode : 0;
++                        }
++
++                        unsigned int mods_bitmap = modifiers;
++                        bool has_other_mods = (mods_bitmap & (2 | 4 | 8 | 16 | 32));
++                        int event_type;
++
++                        if (event.is_key_press()) {
++                                if (m_active_keys.count(event.keyval()))
++                                        event_type = 2;
++                                else {
++                                        m_active_keys.insert(event.keyval());
++                                        event_type = 1;
++                                }
++                        } else {
++                                m_active_keys.erase(event.keyval());
++                                event_type = 3;
++                        }
++
++                        bool use_kitty;
++                        if (report_all)
++                                use_kitty = true;
++                        else if (report_event_types && event_type == 3)
++                                use_kitty = true;
++                        else if (produces_text && !has_other_mods)
++                                use_kitty = false;
++                        else
++                                use_kitty = disambiguate;
++
++                        if (is_plain_special && (mods_bitmap & ~(64 | 128)) == 0)
++                                use_kitty = false;
++
++                        if (!report_event_types) {
++                                if (event_type == 3) return true;
++                                event_type = 1;
++                        }
++                        if (!use_kitty) goto legacy_fallback;
++
++                        char suffix = 'u';
++                        switch (event.keyval()) {
++                        case GDK_KEY_F1: unshifted_key = 1; suffix = 'P'; break;
++                        case GDK_KEY_F2: unshifted_key = 1; suffix = 'Q'; break;
++                        case GDK_KEY_F4: unshifted_key = 1; suffix = 'S'; break;
++                        case GDK_KEY_Delete: case GDK_KEY_Insert: case GDK_KEY_F3:
++                        case GDK_KEY_F5:  case GDK_KEY_F6:  case GDK_KEY_F7:
++                        case GDK_KEY_F8:  case GDK_KEY_F9:  case GDK_KEY_F10:
++                        case GDK_KEY_F11: case GDK_KEY_F12: case GDK_KEY_Page_Up:
++                        case GDK_KEY_Page_Down: suffix = '~'; break;
++                        case GDK_KEY_Up:    unshifted_key = 1; suffix = 'A'; break;
++                        case GDK_KEY_Down:  unshifted_key = 1; suffix = 'B'; break;
++                        case GDK_KEY_Right: unshifted_key = 1; suffix = 'C'; break;
++                        case GDK_KEY_Left:  unshifted_key = 1; suffix = 'D'; break;
++                        case GDK_KEY_KP_Begin: unshifted_key = 1; suffix = 'E'; break;
++                        case GDK_KEY_End:   unshifted_key = 1; suffix = 'F'; break;
++                        case GDK_KEY_Home:  unshifted_key = 1; suffix = 'H'; break;
++                        }
++
++                        unsigned int final_mods = mods_bitmap + 1;
++                        std::string seq_str;
++                        seq_str.reserve(32);
++
++                        bool has_shifted_to_report =
++                            shifted_key &&
++                            (modifiers & 1) && // shift
++                            !(
++                                (modifiers & 64) && // caps
++                                (
++                                    ((shifted_key >= 'A' && shifted_key <= 'Z') || (shifted_key >= 'a' && shifted_key <= 'z')) ||
++                                    // ctrl && char < 32
++                                    ((modifiers & 4) && shifted_key < 32)
++                                )
++                            ) &&
++                            (shifted_key != ' ');
++
++                        bool should_print_alternates = (m_kitty_keyboard_flags & 4) &&
++                                                       has_shifted_to_report;
++                        if (!should_print_alternates && (m_kitty_keyboard_flags & 4) && base_key != 0) {
++                            should_print_alternates = true;
++                        }
++                        bool p2_needed = final_mods != 1 || event_type != 1;
++                        bool p3_needed = ((m_kitty_keyboard_flags & 16) &&
++                                          text_codepoint &&
++                                          text_codepoint >= 32 &&
++                                          text_codepoint != 127 &&
++                                          !has_other_mods);
++
++                        seq_str += "\x1b[";
++                        if (unshifted_key != 1 || suffix == 'u' || p2_needed ||
++                            p3_needed || should_print_alternates) {
++                                seq_str += std::to_string(unshifted_key);
++                        }
++                        bool has_base_to_print = (base_key != 0 && base_key != unshifted_key);
++                        if (should_print_alternates && (has_shifted_to_report || has_base_to_print)) {
++                                seq_str += ':';
++                                if (has_shifted_to_report)
++                                        seq_str += std::to_string(shifted_key);
++                                if (has_base_to_print) {
++                                    seq_str += ':';
++                                    seq_str += std::to_string(base_key);
++                                }
++                        }
++                        if (p2_needed || p3_needed) {
++                                seq_str += ';';
++                                if (p2_needed) {
++                                        seq_str += std::to_string(final_mods);
++                                        if (event_type != 1) {
++                                                seq_str += ':';
++                                                seq_str += std::to_string(event_type);
++                                        }
++                                }
++                        }
++                        if (p3_needed) {
++                                seq_str += ';';
++                                seq_str += std::to_string(text_codepoint);
++                        }
++                        seq_str += suffix;
++                        send_child(seq_str);
++                        return true;
++                }
++        }
++
++legacy_fallback:
++
++        /* Fall back to classic xterm esc seqs generation */
++
+ 	gsize normal_length = 0;
+ 	gboolean scrolled = FALSE, steal = FALSE, modifier = FALSE;
+         auto suppress_alt_esc = false, add_modifiers = false;
+@@ -5576,6 +5956,12 @@ Terminal::widget_key_press(vte::platform::KeyEvent const& event)
+ bool
+ Terminal::widget_key_release(vte::platform::KeyEvent const& event)
+ {
++        /* Logic for kitty keyboard mode (both pressing and releasing) is located in widget_key_press.
++         * We must call it even if Flag 2 is off, to update m_active_keys state. */
++        if (m_kitty_keyboard_flags > 0 && m_kitty_keyboard_mode_is_available) {
++            return widget_key_press(event);
++        }
++
+         m_modifiers = event.modifiers();
+ 
+ 	if (m_input_enabled &&
+@@ -7654,6 +8040,7 @@ Terminal::widget_focus_out()
+ 
+                 m_mouse_pressed_buttons = 0;
+                 m_mouse_handled_buttons = 0;
++                m_active_keys.clear();
+ 	}
+ 
+ 	m_has_focus = false;
+@@ -8398,6 +8785,27 @@ Terminal::Terminal(vte::platform::Widget* w,
+ 
+         update_view_extents();
+ 
++        /* Initialize XKB context for kitty keyboard protocol support.
++         * We use the "US" layout as a baseline for non-text keys to ensure
++         * consistent keycodes, aligning with how the protocol expects
++         * raw/functional keys to be handled.
++         */
++        m_xkb_data.context = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
++        if (!m_xkb_data.context) {
++                m_kitty_keyboard_mode_is_available = false;
++        } else {
++                struct xkb_rule_names rules = { .layout = "us" };
++                m_xkb_data.keymap_us = xkb_keymap_new_from_names(m_xkb_data.context, &rules, XKB_KEYMAP_COMPILE_NO_FLAGS);
++                if (!m_xkb_data.keymap_us) {
++                        m_kitty_keyboard_mode_is_available = false;
++                } else {
++                        m_xkb_data.state_us = xkb_state_new(m_xkb_data.keymap_us);
++                        if (!m_xkb_data.state_us) {
++                                m_kitty_keyboard_mode_is_available = false;
++                        }
++                }
++        }
++
+ #if VTE_DEBUG
+         if (g_test_flags != 0) {
+                 feed("\e[1m\e[31mWARNING:\e[39m Test mode enabled. This is insecure!\e[0m\n\e[G"sv, false);
+@@ -8703,6 +9111,16 @@ Terminal::~Terminal()
+         /* Update rects */
+         g_array_free(m_update_rects, TRUE /* free segment */);
+ #endif
++
++        if (m_xkb_data.state_us) {
++                xkb_state_unref(m_xkb_data.state_us);
++        }
++        if (m_xkb_data.keymap_us) {
++                xkb_keymap_unref(m_xkb_data.keymap_us);
++        }
++        if (m_xkb_data.context) {
++                xkb_context_unref(m_xkb_data.context);
++        }
+ }
+ 
+ void
+@@ -10818,6 +11236,10 @@ Terminal::reset(bool clear_tabstops,
+ 
+         // Reset termprops
+         reset_termprops();
++
++        m_kitty_keyboard_flags = 0;
++        m_kitty_keyboard_flags_stack.clear();
++        m_active_keys.clear();
+ }
+ 
+ void
+diff --git a/src/vteinternal.hh b/src/vteinternal.hh
+index 4ba6357..4b88f8c 100644
+--- a/src/vteinternal.hh
++++ b/src/vteinternal.hh
+@@ -825,6 +825,43 @@ public:
+ 
+         // Termprops
+         vte::property::TrackingStore m_termprops;
++        /* kitty keyboard protocol support */
++        struct XkbData {
++                struct xkb_context *context = nullptr;
++                struct xkb_keymap *keymap_us = nullptr;
++                struct xkb_state *state_us = nullptr;
++        };
++        XkbData m_xkb_data;
++        /*
++         * Flags for the kitty keyboard protocol.
++         * 0 = disabled (legacy mode).
++         */
++        int m_kitty_keyboard_flags = 0;
++        std::vector<int> m_kitty_keyboard_flags_stack;
++        std::unordered_set<guint> m_active_keys;
++        bool m_kitty_keyboard_mode_is_available = true;
++
++        void set_kitty_keyboard_flags(int flags) noexcept { m_kitty_keyboard_flags = flags; }
++
++        void push_kitty_keyboard_flags(int flags) noexcept {
++                if (m_kitty_keyboard_flags_stack.size() >= 16) {
++                        m_kitty_keyboard_flags_stack.erase(m_kitty_keyboard_flags_stack.begin());
++                }
++                m_kitty_keyboard_flags_stack.push_back(m_kitty_keyboard_flags);
++                m_kitty_keyboard_flags = flags;
++        }
++
++        void pop_kitty_keyboard_flags(int count) noexcept {
++                if (count <= 0) count = 1;
++                while (count > 0 && !m_kitty_keyboard_flags_stack.empty()) {
++                        m_kitty_keyboard_flags = m_kitty_keyboard_flags_stack.back();
++                        m_kitty_keyboard_flags_stack.pop_back();
++                        count--;
++                }
++                if (count > 0) {
++                        m_kitty_keyboard_flags = 0;
++                }
++        }
+ 
+         auto const& termprops() const noexcept
+         {

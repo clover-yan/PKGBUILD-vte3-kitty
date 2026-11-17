@@ -32,6 +32,7 @@ depends=(
   icu
   libgcc
   libstdc++
+  libxkbcommon
   lz4
   pango
   pcre2
@@ -55,11 +56,18 @@ makedepends=(
   vala
 )
 options=(!lto)
-source=("git+https://gitlab.gnome.org/GNOME/vte.git#tag=$pkgver")
-b2sums=('f8f03ea82a08697d28a8e7a76729c39cb2088335380eb21b0af54f04519fb293f257a334c8b41948707b50cebbb8bb9c792a2c745b38f3834c9351ae730610ce')
+source=("git+https://gitlab.gnome.org/GNOME/vte.git#tag=$pkgver"
+        # Kitty keyboard protocol (CSI u) support, from
+        # https://gitlab.gnome.org/GNOME/vte/-/merge_requests/14 (author: unxed),
+        # rebased onto $pkgver. Lets apps that request it (e.g. opencode) see
+        # modified keys such as Shift+Enter and Ctrl+Enter.
+        0001-kitty-keyboard-protocol.patch)
+b2sums=('f8f03ea82a08697d28a8e7a76729c39cb2088335380eb21b0af54f04519fb293f257a334c8b41948707b50cebbb8bb9c792a2c745b38f3834c9351ae730610ce'
+        'f29baf6657ee4bc1eb60c3181654f229f02ffe9495bebfd1217aa4b3925fdea93ef5b30b1bbfe9939b0938d2503dde6cce97f8ca204951149f093eda8908893a')
 
 prepare() {
   cd vte
+  patch -Np1 -i "$srcdir/0001-kitty-keyboard-protocol.patch"
 }
 
 build() {
